@@ -1,10 +1,39 @@
 <script lang="ts">
-	export let name: string;
+	export let albumList: string[];
+	let likedAlbumList: string[] = [];
+
+	const likeAlbum = (album: string) => {
+		addAlbum(album);
+		removeAlbum(album);
+	};
+
+	const dislikeAlbum = (album: string) => {
+		removeAlbum(album);
+	};
+
+	const removeAlbum = (album: string) => {
+		albumList = albumList.filter((item) => item != album);
+	};
+
+	const addAlbum = (album: string) => {
+		likedAlbumList = [...likedAlbumList, album];
+	};
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#each albumList as album}
+		<img src="static/{album}" alt="YEAH" on:click={() => likeAlbum(album)}/>
+		<button on:click={() => dislikeAlbum(album)}>Dislike</button>
+	{/each}
+
+	<ul class="likedAlbumList">
+		{#each likedAlbumList as album}
+			<li>
+				<!-- <img src="static/{album}" alt=""/> -->
+				{album.split(".")[0]}
+			</li>
+		{/each}
+	</ul>
 </main>
 
 <style>
@@ -15,11 +44,9 @@
 		margin: 0 auto;
 	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+	.likedAlbumList img {
+		width: 10%;
+		height: 10%;
 	}
 
 	@media (min-width: 640px) {
